@@ -1,0 +1,22 @@
+{
+    "name": "Pursue",
+    "version": "0.1",
+    "icons": { 
+        "16": "/img/icons/icon_16.png",
+        "48": "/img/icons/icon_48.png",
+        "128": "/img/icons/icon_128.png" 
+    },
+    "description": "Search bar focus and result selection on various websites",
+    "permissions": [
+    ],
+    "content_scripts": [
+        {
+            "matches": ["*://www.google.com/*"],
+            "js": [
+            	"/bower_components/jquery/dist/jquery.min.js", 
+                "/js/pursue.js"
+		]
+        }
+    ],
+    "manifest_version": 2
+}

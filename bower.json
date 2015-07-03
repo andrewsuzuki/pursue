@@ -1,0 +1,23 @@
+{
+  "name": "pursue",
+  "version": "0.1.0",
+  "homepage": "https://github.com/andrewsuzuki/pursue",
+  "authors": [
+    "Andrew Suzuki <andrew.b.suzuki@gmail.com>"
+  ],
+  "description": "Search bar focus and result selection on various websites",
+  "keywords": [
+    "pursue"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}
