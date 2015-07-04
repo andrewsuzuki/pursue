@@ -1,55 +1,75 @@
-$(function() {
-	var cuts = 'alt+shift+1, alt+shift+2, alt+shift+3, ' +
-		'alt+shift+4, alt+shift+5, alt+shift+6, ' + 
-		'alt+shift+7, alt+shift+8, alt+shift+9';
+function Pursue() {
+	this.drivers = [];
+	this.newTabMode = false;
+}
 
-	var log = function(str) {
-		console.log('pursue: ' + str);
-	};
+Pursue.prototype.log = function(str) {
+	console.log('pursue: ' + str);
+};
 
-	var getResults = function() {
-		return $('body .g');
-	};
+Pursue.prototype.getResults = function() {
+	return $('body .g');
+};
 
-	var getNthResultEl = function(n) {
-		var gs = getResults();
+Pursue.prototype.getNthResultEl = function(n) {
+	var gs = this.getResults();
 
-		// check if result n exists
-		if (gs.eq(n - 1).length) {
-			return gs.eq(n - 1);
-		}
+	// check if result n exists
+	if (gs.eq(n - 1).length) {
+		return gs.eq(n - 1);
+	}
 
-		return false;
-	};
+	return false;
+};
 
-	var flashResult = function(el) {
-		// TODO: flash headlight effect on result
-	};
+Pursue.prototype.flashResult = function(el) {
+	// TODO: flash headlight effect on result
+};
 
-	var goToResult = function(el, newtab) {
-		newtab = typeof newtab === 'undefined' ? false : newtab;
+Pursue.prototype.goToResult = function(el, newtab) {
+	newtab = typeof newtab === 'undefined' ? false : newtab;
 
-		var href = el.find('a').first().attr('href');
+	var href = el.find('a').first().attr('href');
 
-		if (newtab) {
-			window.open(href, '_blank');
-		} else {
-			location.href = href;
-		}
-	};
+	if (newtab) {
+		window.open(href, '_blank');
+	} else {
+		location.href = href;
+	}
+};
 
-	key(cuts, function(event, handler) {
-		var sc = handler.shortcut; // shortcut used
-		var n = sc.split('+')[2]; // 1<=n<=9
+Pursue.prototype.shortcutList = function() {
+	var prefix = 'alt+';
 
-		var el = getNthResultEl(n);
-		if (el !== false) {
-			flashResult(el);
-			goToResult(el, false);
-		} else {
-			// TODO: disp error
-		}
-
-		return false; // prefent default
+	// generate alt+1, alt+2, etc shortcuts
+	var nums = Array.apply(null, new Array(9)).map(function(val, i) {
+		return prefix + (i + 1);
 	});
-});
+
+	nums.push(prefix + 's'); // search 
+		
+	return nums;
+};
+
+Pursue.prototype.handleShortcut = function(event, handler) {
+	var sc = handler.shortcut; // shortcut used
+	var n = sc.split('+')[1];
+
+	var el = this.getNthResultEl(n);
+	if (el !== false) {
+		this.flashResult(el);
+		this.goToResult(el, this.newTabMode);
+	} else {
+		this.log('result get err');
+	}
+
+	return false; // prefent default
+};
+
+Pursue.prototype.run = function() {
+	// watch for shortcuts using keymaster
+	key(this.shortcutList().join(', '), this.handleShortcut.bind(this));
+};
+
+var pursue = new Pursue();
+pursue.run();
