@@ -1,35 +1,28 @@
 function Pursue() {
-	this.drivers = [];
-	this.newTabMode = false;
+	this.driver = null;
+	this.result_n = -1;
 }
 
 Pursue.prototype.log = function(str) {
 	console.log('pursue: ' + str);
 };
 
-Pursue.prototype.getResults = function() {
-	return $('body .g');
+// Use first applicable driver
+Pursue.prototype.tryDriver = function(driver) {
+	if (this.driver === null && driver.isApplicable()) {
+		this.driver = driver;
+		this.driver.setup();
+		this.driver.highlightResult(this.result_n);
+	}
 };
 
-Pursue.prototype.getNthResultEl = function(n) {
-	var gs = this.getResults();
-
-	// check if result n exists
-	if (gs.eq(n - 1).length) {
-		return gs.eq(n - 1);
+// Open nth result's url, optionally in a new tab
+Pursue.prototype.goToResult = function(n, newtab) {
+	if (typeof newtab === 'undefined' || !this.driver.newTabOkay()) {
+		newtab = false;
 	}
 
-	return false;
-};
-
-Pursue.prototype.flashResult = function(el) {
-	// TODO: flash headlight effect on result
-};
-
-Pursue.prototype.goToResult = function(el, newtab) {
-	newtab = typeof newtab === 'undefined' ? false : newtab;
-
-	var href = el.find('a').first().attr('href');
+	var href = this.driver.resultUrl(this.result_n);
 
 	if (newtab) {
 		window.open(href, '_blank');
@@ -38,37 +31,51 @@ Pursue.prototype.goToResult = function(el, newtab) {
 	}
 };
 
-Pursue.prototype.shortcutList = function() {
-	var prefix = 'alt+';
+// List keyboard commands and assoiated methods
+Pursue.prototype.shortcuts = function() {
+	return {
+		'shift+down': this.doDown.bind(this),
+		'shift+up': this.doUp.bind(this), 
+		'shift+enter': this.doEnter.bind(this), 
+		'ctrl+shift+enter': this.doTabEnter.bind(this),
+		'command+shift+enter': this.doTabEnter.bind(this)
+	};
+};
 
-	// generate alt+1, alt+2, etc shortcuts
-	var nums = Array.apply(null, new Array(9)).map(function(val, i) {
-		return prefix + (i + 1);
-	});
+Pursue.prototype.doDown = function() {
+	if (this.result_n < this.driver.countResults()) {
+		this.result_n += 1;
+	}
+	this.driver.highlightResult(this.result_n);
+};
 
-	nums.push(prefix + 's'); // search 
-		
-	return nums;
+Pursue.prototype.doUp = function() {
+	if (this.result_n > 0) {
+		this.result_n -= 1;
+	}
+	this.driver.highlightResult(this.result_n);
+};
+
+Pursue.prototype.doEnter = function() {
+	this.goToResult(this.result_n, false);
+};
+
+Pursue.prototype.doTabEnter = function() {
+	this.goToResult(this.result_n, true);
 };
 
 Pursue.prototype.handleShortcut = function(event, handler) {
 	var sc = handler.shortcut; // shortcut used
-	var n = sc.split('+')[1];
-
-	var el = this.getNthResultEl(n);
-	if (el !== false) {
-		this.flashResult(el);
-		this.goToResult(el, this.newTabMode);
-	} else {
-		this.log('result get err');
+	var shortcuts = this.shortcuts();
+	if (shortcuts[sc]) {
+		shortcuts[sc].call();
 	}
-
-	return false; // prefent default
+	return false; // prevent default
 };
 
 Pursue.prototype.run = function() {
 	// watch for shortcuts using keymaster
-	key(this.shortcutList().join(', '), this.handleShortcut.bind(this));
+	key(Object.keys(this.shortcuts()).join(', '), this.handleShortcut.bind(this));
 };
 
 var pursue = new Pursue();
