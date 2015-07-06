@@ -1,9 +1,8 @@
 function Github() {
-	
 }
 
 Github.prototype.isApplicable = function() {
-	return true;
+	return false;
 };
 
 Github.prototype.newTabOkay = function() {
@@ -11,7 +10,6 @@ Github.prototype.newTabOkay = function() {
 };
 
 Github.prototype.setup = function() {
-	console.log('pursue github loaded');
 };
 
 Github.prototype.getResults = function() {
@@ -45,7 +43,6 @@ Github.prototype.highlightResult = function(n) {
 };
 
 Github.prototype.resultUrl = function(n) {
-	console.log('ok..');
 	var result = this.getResult(n);
 	if (!result) {
 		return false;
@@ -55,6 +52,10 @@ Github.prototype.resultUrl = function(n) {
 		return false;
 	}
 	return href;
+};
+
+Github.prototype.search = function() {
+	$('input.js-site-search-focus').first().focus();
 };
 
 pursue.tryDriver(new Github());

@@ -38,7 +38,8 @@ Pursue.prototype.shortcuts = function() {
 		'shift+up': this.doUp.bind(this), 
 		'shift+enter': this.doEnter.bind(this), 
 		'ctrl+shift+enter': this.doTabEnter.bind(this),
-		'command+shift+enter': this.doTabEnter.bind(this)
+		'command+shift+enter': this.doTabEnter.bind(this),
+		'shift+s': this.doSearch.bind(this)
 	};
 };
 
@@ -62,6 +63,10 @@ Pursue.prototype.doEnter = function() {
 
 Pursue.prototype.doTabEnter = function() {
 	this.goToResult(this.result_n, true);
+};
+
+Pursue.prototype.doSearch = function() {
+	this.driver.search();
 };
 
 Pursue.prototype.handleShortcut = function(event, handler) {

@@ -2,8 +2,7 @@ function GoogleSearch() {
 }
 
 GoogleSearch.prototype.isApplicable = function() {
-	// TODO: only return true when on search results page
-	return false;
+	return true;
 };
 
 GoogleSearch.prototype.newTabOkay = function() {
@@ -11,7 +10,6 @@ GoogleSearch.prototype.newTabOkay = function() {
 };
 
 GoogleSearch.prototype.setup = function() {
-
 };
 
 GoogleSearch.prototype.getResults = function() {
@@ -54,6 +52,10 @@ GoogleSearch.prototype.resultUrl = function(n) {
 		return false;
 	}
 	return href;
+};
+
+GoogleSearch.prototype.search = function() {
+	$('#lst-ib').focus();
 };
 
 pursue.tryDriver(new GoogleSearch());
