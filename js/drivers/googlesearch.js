@@ -3,7 +3,7 @@ function GoogleSearch() {
 
 GoogleSearch.prototype.isApplicable = function() {
 	// TODO: only return true when on search results page
-	return true;
+	return false;
 };
 
 GoogleSearch.prototype.newTabOkay = function() {

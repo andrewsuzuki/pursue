@@ -11,12 +11,16 @@
     ],
     "content_scripts": [
         {
-            "matches": ["*://www.google.com/*"],
+            "matches": [
+		    "*://www.google.com/*",
+		    "*://github.com/*"
+	    ],
             "js": [
             	"/bower_components/jquery/dist/jquery.min.js", 
             	"/bower_components/keymaster/keymaster.js", 
                 "/js/pursue.js",
-                "/js/drivers/googlesearch.js"
+                "/js/drivers/googlesearch.js",
+                "/js/drivers/github.js"
 		]
         }
     ],

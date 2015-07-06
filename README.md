@@ -4,6 +4,12 @@ Chrome extension for search bar focus and result selection on various websites.
 
 ## Build + Install
 
+Requirements:
+
+* Git
+* Bower
+* Chrome
+
 ```sh
 # Clone into new folder
 $ git clone https://github.com/andrewsuzuki/pursue.git
